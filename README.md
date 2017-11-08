@@ -10,7 +10,8 @@ Zombie Attack will feature a modal instruction, displaying sprites, playing soun
 This game will utilize vanilla JS and HTML 5
 
 ## Wireframes 
-
+![modal](https://user-images.githubusercontent.com/30328018/32550034-991aa482-c459-11e7-9c2e-59da80458c16.png)
+![game-board](https://user-images.githubusercontent.com/30328018/32550194-2ffb36fa-c45a-11e7-97d8-860535bb094a.png)
 
 ## Implementation Timeline 
 
