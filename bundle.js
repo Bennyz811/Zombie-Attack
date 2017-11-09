@@ -67,29 +67,47 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+const Game = __webpack_require__(1);
+const Player = __webpack_require__(2);
 
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
 
-var Game = __webpack_require__(1);
-var Player = __webpack_require__(2);
+  const game = new Game(
+    ctx
+  );
+  
+})
 
-document.addEventListener('DOMContentLoaded', function () {
-  var canvas = document.querySelector('canvas');
-  var ctx = canvas.getContext('2d');
-});
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+const Player = __webpack_require__(2);
+
+class Game {
+  constructor(ctx){
+    this.ctx = ctx
+    this.player = new Player({ position: [100 , 200]})
+  }
+
+
+}
+
+module.exports = Game
 
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
+class Player {
+  constructor(){
+    
+  }
+}
 
 
 /***/ })
