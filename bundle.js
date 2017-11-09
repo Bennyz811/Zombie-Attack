@@ -71,13 +71,14 @@ const Game = __webpack_require__(1);
 const Player = __webpack_require__(2);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.querySelector('canvas');
-  const ctx = canvas.getContext('2d');
+  const gameCanvas = document.getElementById('canvas');
+  const ctx = gameCanvas.getContext('2d');
 
   const game = new Game(
-    ctx
+    ctx,
+    gameCanvas
   );
-  
+  game.start()
 })
 
 
@@ -88,11 +89,15 @@ document.addEventListener('DOMContentLoaded', () => {
 const Player = __webpack_require__(2);
 
 class Game {
-  constructor(ctx){
+  constructor(ctx, gameCanvas){
     this.ctx = ctx
+    this.gameCanvas = gameCanvas
     this.player = new Player({ position: [100 , 200]})
   }
 
+  start(){
+    window.setInterval(() => this.player.update(this.ctx), 30)
+  }
 
 }
 
@@ -104,10 +109,22 @@ module.exports = Game
 /***/ (function(module, exports) {
 
 class Player {
-  constructor(){
-    
+  constructor(opt){
+    this.position = opt.position
+  }
+
+  draw(ctx){
+    ctx.fillRect(25, 25, 100, 100);
+    ctx.clearRect(45, 45, 60, 60);
+    ctx.strokeRect(50, 50, 50, 50);
+  }
+
+  update(ctx){
+    this.draw(ctx);
   }
 }
+
+module.exports = Player
 
 
 /***/ })
