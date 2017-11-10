@@ -92,11 +92,11 @@ class Game {
   constructor(ctx, gameCanvas){
     this.ctx = ctx
     this.gameCanvas = gameCanvas
-    this.player = new Player({ position: [100 , 200]})
+    this.player = new Player({ position: [10 , 10]})
   }
 
   start(){
-    window.setInterval(() => this.player.update(this.ctx), 30)
+    this.player.update(this.ctx)
   }
 
 }
@@ -108,19 +108,44 @@ module.exports = Game
 /* 2 */
 /***/ (function(module, exports) {
 
+var startX = 150
+var startY = 100
+var dx = 5
+var dy = 5
 class Player {
-  constructor(opt){
-    this.position = opt.position
+  constructor(option){
+    this.position = option.position
+    this.controlls()
   }
 
   draw(ctx){
-    ctx.fillRect(25, 25, 100, 100);
-    ctx.clearRect(45, 45, 60, 60);
-    ctx.strokeRect(50, 50, 50, 50);
+    ctx.fillRect(startX, startY, 10, 10)
   }
 
   update(ctx){
     this.draw(ctx);
+  }
+
+  controlls(){
+    debugger
+    document.addEventListener("keydown", (e) => {
+      switch (e.keycode) {
+        case 38:
+        startY -= y
+        break
+        case 39:
+        console.log('this is right');
+        break
+        case 37:
+        console.log('this is left');
+        break
+        case 40:
+        console.log('this is down');
+        break
+        default:
+        console.log('this is not a key');
+      }
+    })
   }
 }
 
