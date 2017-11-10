@@ -3,6 +3,7 @@ canvas {
   margin: 100px auto;
   border-radius: 3px;
   display: block;
+  overflow: hidden;
 }
 
 body{
