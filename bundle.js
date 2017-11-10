@@ -128,6 +128,7 @@ class Player {
     this.height = 10
     this.width = 10
     this.jumping = false;
+    this.hero = new Image();
   }
 
   controlls(){
