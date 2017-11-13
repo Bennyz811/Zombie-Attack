@@ -103,7 +103,7 @@ var Player = function () {
     this.jumping = false;
     this.bullets = [];
     this.heroSprite = new Image();
-    this.heroSprite.src = "/Users/bennyzhao/Desktop/zombie_attack/app/assets/images/Hero-Guy-PNG/_Mode-Gun/02-Run/JK_P_Gun__Run_000.png";
+    this.heroSprite.src = "./app/assets/images/Hero-Guy-PNG/_Mode-Gun/02-Run/JK_P_Gun__Run_000.png";
   }
 
   _createClass(Player, [{
@@ -123,24 +123,21 @@ var Player = function () {
   }, {
     key: "fireBullets",
     value: function fireBullets(ctx) {
-      var newBullets = new _bullets2.default(this.startX, this.startY);
+      var dx = this.dx;
+      var dy = this.dy;
+      var newBullets = new _bullets2.default(this.startX, this.startY, dx, dy);
       this.bullets.push(newBullets);
-      for (var i = 0; i < this.bullets.length; i++) {
-        this.bullets[i].drawBullet(ctx);
-        this.bullets[i].move();
-      }
+    }
+  }, {
+    key: "move",
+    value: function move() {
+      this.startX += this.dx;
     }
   }, {
     key: "draw",
     value: function draw(ctx) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      // ctx.fillRect(this.startX, this.startY, this.width, this.height)
-      // const heroSprite = new Image();
-      // heroSprite.src = '../assets/images/Hero-Guy-PNG/_Mode-Gun/02-Run/JK_P_Gun__Run_000.png'
       ctx.drawImage(this.heroSprite, this.startX, this.startY, this.width, this.height);
-      // const hero =
-      this.fireBullets(ctx);
-      // this.bullets.move();
       if (this.land()) {
         this.jumping = false;
       }
@@ -150,13 +147,13 @@ var Player = function () {
     value: function hero() {
       this.heroSprite.addEventListener("load", this.loadImage, false);
     }
-  }, {
-    key: "animate",
-    value: function animate() {
-      draw();
-      update();
-      requestAnimationFrame(this.heroSprite.onload);
-    }
+    //
+    // animate(){
+    //   draw();
+    //   update();
+    //   requestAnimationFrame(this.heroSprite.onload);
+    // }
+
   }, {
     key: "jump",
     value: function jump() {
@@ -201,7 +198,6 @@ var Player = function () {
         this.startX -= this.dx;
       }
       if (this.keys[32]) {
-        console.log("pewpew");
         this.fireBullets(ctx);
       }
       this.draw(ctx);
@@ -252,6 +248,12 @@ var _player = __webpack_require__(0);
 
 var _player2 = _interopRequireDefault(_player);
 
+var _graveyard = __webpack_require__(5);
+
+var GraveYard = _interopRequireWildcard(_graveyard);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -264,27 +266,36 @@ var Game = function () {
     this.gameCanvas = gameCanvas;
     this.player = new _player2.default({ position: [10, 10] });
     this.bullets = [];
+    this.zombies = [];
   }
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
       this.draw();
+      // GraveYard.spawnZombies()
     }
   }, {
     key: 'draw',
     value: function draw() {
+      var _this = this;
+
       requestAnimationFrame(this.draw.bind(this));
       this.player.update(this.ctx);
-      // this.player.bullets.forEach(b => b.draw(this.ctx))
+      this.player.bullets.forEach(function (b) {
+        setInterval(function () {
+          b.move();
+        }, 1000);
+        b.drawBullet(_this.ctx);
+      });
     }
   }, {
     key: 'playerActions',
     value: function playerActions() {
-      var _this = this;
+      var _this2 = this;
 
       this.player.bullets.forEach(function (b) {
-        b.draw(_this.ctx);
+        b.draw(_this2.ctx);
       });
     }
   }]);
@@ -310,27 +321,35 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Bullets = function () {
-  function Bullets(option) {
+  function Bullets(posX, posY, dx, dy) {
     _classCallCheck(this, Bullets);
 
-    this.x = 4;
-    this.y = 2;
-    this.posX = 0;
-    this.posY = 0;
+    this.dx = dx;
+    this.dy = dy;
+    this.gone = false;
+    this.posX = posX;
+    this.posY = posY;
+    this.x = 5;
+    this.y = 5;
   }
 
   _createClass(Bullets, [{
-    key: "move",
+    key: 'move',
     value: function move() {
-      this.x = this.x + 1;
+      this.dx += 5;
     }
   }, {
-    key: "drawBullet",
+    key: 'destroyBullet',
+    value: function destroyBullet() {
+      this.gone = true;
+    }
+  }, {
+    key: 'drawBullet',
     value: function drawBullet(ctx) {
-      // debugger
+      ctx.fillStyle = 'red';
+      ctx.fillRect(this.posX + 20, this.posY + 30, this.dx, this.dy);
+      ctx.clearRect(this.posX - 20, this.posY + 30, this.dx, this.dy);
       this.move();
-      ctx.fillRect(this.posX, this.posY, this.x, this.y);
-      // ctx.eclipse(this.x, this.y, 20, 20);
     }
   }]);
 
@@ -338,6 +357,97 @@ var Bullets = function () {
 }();
 
 exports.default = Bullets;
+
+/***/ }),
+/* 4 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _zombie = __webpack_require__(6);
+
+var Zombie = _interopRequireWildcard(_zombie);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GraveYard = function () {
+  function GraveYard(game) {
+    _classCallCheck(this, GraveYard);
+
+    this.game = game;
+  }
+
+  _createClass(GraveYard, [{
+    key: 'spawnZombies',
+    value: function spawnZombies() {
+      this.game.zombies.push(new Zombie());
+    }
+  }]);
+
+  return GraveYard;
+}();
+
+exports.default = GraveYard;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Zombie = function () {
+  function Zombie() {
+    _classCallCheck(this, Zombie);
+
+    this.startX = [0, canvas.width][Math.floor(Math.random() * 2)];
+    this.startY = canvas.height;
+    this.disappear = false;
+  }
+
+  _createClass(Zombie, [{
+    key: "drawZombie",
+    value: function drawZombie(ctx) {
+      this.move();
+      ctx.fillRect(this.startX, this.startY, 10, 10);
+    }
+  }, {
+    key: "update",
+    value: function update() {}
+  }, {
+    key: "death",
+    value: function death() {
+      this.disappear = true;
+    }
+  }, {
+    key: "move",
+    value: function move() {
+      this.startX += 4;
+    }
+  }]);
+
+  return Zombie;
+}();
+
+exports.default = Zombie;
 
 /***/ })
 /******/ ]);
