@@ -60,11 +60,109 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _game = __webpack_require__(1);
+
+var _game2 = _interopRequireDefault(_game);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  var gameCanvas = document.getElementById('canvas');
+  var ctx = gameCanvas.getContext('2d');
+
+  var game = new _game2.default(ctx, gameCanvas);
+
+  game.start();
+});
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _player = __webpack_require__(2);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _graveyard = __webpack_require__(4);
+
+var _graveyard2 = _interopRequireDefault(_graveyard);
+
+var _zombie = __webpack_require__(5);
+
+var _zombie2 = _interopRequireDefault(_zombie);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Game = function () {
+  function Game(ctx, gameCanvas, player) {
+    _classCallCheck(this, Game);
+
+    this.ctx = ctx;
+    this.gameCanvas = gameCanvas;
+    this.player = new _player2.default({ position: [10, 10] });
+    this.bullets = [];
+    this.zombies = [];
+    this.g = new _graveyard2.default(ctx);
+    this.z = new _zombie2.default(null, null, ctx);
+  }
+
+  _createClass(Game, [{
+    key: 'start',
+    value: function start() {
+      this.draw();
+      this.g.spawnZombies();
+    }
+  }, {
+    key: 'draw',
+    value: function draw() {
+      var _this = this;
+
+      this.player.update(this.ctx);
+      this.g.spawnZombies();
+      this.player.bullets.forEach(function (b) {
+        window.setTimeout(b.drawBullet(_this.ctx), 5000), setTimeout(b.move(), 5000);
+      });
+      requestAnimationFrame(this.draw.bind(this));
+    }
+  }, {
+    key: 'playerActions',
+    value: function playerActions() {
+      var _this2 = this;
+
+      this.player.bullets.forEach(function (b) {
+        b.draw(_this2.ctx);
+      });
+    }
+  }]);
+
+  return Game;
+}();
+
+exports.default = Game;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,7 +296,8 @@ var Player = function () {
         this.startX -= this.dx;
       }
       if (this.keys[32]) {
-        this.fireBullets(ctx);
+        console.log("pew");
+        setTimeout(this.fireBullets(ctx), 5000);
       }
       this.draw(ctx);
     }
@@ -208,102 +307,6 @@ var Player = function () {
 }();
 
 exports.default = Player;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _game = __webpack_require__(2);
-
-var _game2 = _interopRequireDefault(_game);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  var gameCanvas = document.getElementById('canvas');
-  var ctx = gameCanvas.getContext('2d');
-
-  var game = new _game2.default(ctx, gameCanvas);
-
-  game.start();
-});
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _player = __webpack_require__(0);
-
-var _player2 = _interopRequireDefault(_player);
-
-var _graveyard = __webpack_require__(5);
-
-var GraveYard = _interopRequireWildcard(_graveyard);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Game = function () {
-  function Game(ctx, gameCanvas, player) {
-    _classCallCheck(this, Game);
-
-    this.ctx = ctx;
-    this.gameCanvas = gameCanvas;
-    this.player = new _player2.default({ position: [10, 10] });
-    this.bullets = [];
-    this.zombies = [];
-  }
-
-  _createClass(Game, [{
-    key: 'start',
-    value: function start() {
-      this.draw();
-      // GraveYard.spawnZombies()
-    }
-  }, {
-    key: 'draw',
-    value: function draw() {
-      var _this = this;
-
-      requestAnimationFrame(this.draw.bind(this));
-      this.player.update(this.ctx);
-      this.player.bullets.forEach(function (b) {
-        setInterval(function () {
-          b.move();
-        }, 1000);
-        b.drawBullet(_this.ctx);
-      });
-    }
-  }, {
-    key: 'playerActions',
-    value: function playerActions() {
-      var _this2 = this;
-
-      this.player.bullets.forEach(function (b) {
-        b.draw(_this2.ctx);
-      });
-    }
-  }]);
-
-  return Game;
-}();
-
-exports.default = Game;
 
 /***/ }),
 /* 3 */
@@ -336,7 +339,8 @@ var Bullets = function () {
   _createClass(Bullets, [{
     key: 'move',
     value: function move() {
-      this.dx += 5;
+      // this.dx += 5
+      this.posX += 5;
     }
   }, {
     key: 'destroyBullet',
@@ -348,8 +352,9 @@ var Bullets = function () {
     value: function drawBullet(ctx) {
       ctx.fillStyle = 'red';
       ctx.fillRect(this.posX + 20, this.posY + 30, this.dx, this.dy);
-      ctx.clearRect(this.posX - 20, this.posY + 30, this.dx, this.dy);
+      // ctx.clearRect(this.posX-20, this.posY+30, this.dx, this.dy);
       this.move();
+      this.destroyBullet();
     }
   }]);
 
@@ -359,8 +364,7 @@ var Bullets = function () {
 exports.default = Bullets;
 
 /***/ }),
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -372,25 +376,32 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _zombie = __webpack_require__(6);
+var _zombie = __webpack_require__(5);
 
-var Zombie = _interopRequireWildcard(_zombie);
+var _zombie2 = _interopRequireDefault(_zombie);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GraveYard = function () {
-  function GraveYard(game) {
+  function GraveYard(ctx) {
     _classCallCheck(this, GraveYard);
 
-    this.game = game;
+    this.ctx = ctx;
+    this.zombies = [];
+    this.startX = canvas.width - 5;
+    this.startY = canvas.height;
+    this.dx = 4;
+    this.dy = 4;
+    this.spawnZombies();
   }
 
   _createClass(GraveYard, [{
     key: 'spawnZombies',
     value: function spawnZombies() {
-      this.game.zombies.push(new Zombie());
+      var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
+      this.zombies.push(zom);
     }
   }]);
 
@@ -400,7 +411,7 @@ var GraveYard = function () {
 exports.default = GraveYard;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -415,32 +426,39 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Zombie = function () {
-  function Zombie() {
+  function Zombie(startX, startY, ctx) {
     _classCallCheck(this, Zombie);
 
-    this.startX = [0, canvas.width][Math.floor(Math.random() * 2)];
+    this.ctx = ctx;
+    this.startX = canvas.width - 5;
     this.startY = canvas.height;
     this.disappear = false;
+    this.dx = 30;
+    this.dy = 30;
+    this.update(ctx);
   }
 
   _createClass(Zombie, [{
-    key: "drawZombie",
+    key: 'drawZombie',
     value: function drawZombie(ctx) {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(this.startX, this.startY, this.dx, this.dy);
       this.move();
-      ctx.fillRect(this.startX, this.startY, 10, 10);
     }
   }, {
-    key: "update",
-    value: function update() {}
+    key: 'update',
+    value: function update(ctx) {
+      this.drawZombie(this.ctx);
+    }
   }, {
-    key: "death",
+    key: 'death',
     value: function death() {
       this.disappear = true;
     }
   }, {
-    key: "move",
+    key: 'move',
     value: function move() {
-      this.startX += 4;
+      this.startX -= 4;
     }
   }]);
 
