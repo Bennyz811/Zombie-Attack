@@ -4,6 +4,12 @@ canvas {
   border-radius: 3px;
   display: block;
   overflow: hidden;
+  position: absolute;
+  /*z-index: 2;*/
+}
+
+background-canvas{
+
 }
 
 body{
