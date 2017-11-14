@@ -1,7 +1,7 @@
 canvas {
   border: 1px solid black;
   margin: 100px auto;
-  border-radius: 3px;
+  border-radius: 4px;
   display: block;
   overflow: hidden;
   position: absolute;
@@ -13,5 +13,5 @@ background-canvas{
 }
 
 body{
-  /*background: #222;*/
+  background: #504545;
 }

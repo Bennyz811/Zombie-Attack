@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,11 +70,122 @@
 "use strict";
 
 
-var _game = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Zombie = function () {
+  function Zombie(startX, startY, ctx) {
+    _classCallCheck(this, Zombie);
+
+    this.ctx = ctx;
+    this.startX = canvas.width;
+    this.startY = canvas.height - 20;
+    this.disappear = false;
+    this.x = 20;
+    this.y = 20;
+  }
+
+  _createClass(Zombie, [{
+    key: 'drawZombie',
+    value: function drawZombie(ctx) {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(this.startX, this.startY, this.x, this.y);
+      this.move();
+    }
+  }, {
+    key: 'update',
+    value: function update(ctx) {
+      this.drawZombie(ctx);
+    }
+  }, {
+    key: 'death',
+    value: function death() {
+      this.disappear = true;
+    }
+  }, {
+    key: 'move',
+    value: function move() {
+      this.startX -= 0.8;
+    }
+  }]);
+
+  return Zombie;
+}();
+
+exports.default = Zombie;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Background = function () {
+  function Background(ctx, img, posY, imgLength, velocity) {
+    _classCallCheck(this, Background);
+
+    this.ctx = ctx;
+    this.img = img;
+    this.x = 0;
+    this.velocity = velocity;
+    this.posY = posY;
+    this.imgLength = imgLength;
+    // this.draw = this.draw.bind(this)
+  }
+
+  _createClass(Background, [{
+    key: "draw",
+    value: function draw() {
+      this.ctx.clearRect(0, 0, 800, 400);
+      this.ctx.drawImage(this.img, this.x, this.posY);
+      this.ctx.drawImage(this.img, this.x + this.imgLength, this.posY);
+      if (this.imgLength < 800) {
+        this.ctx.drawImage(this.img, this.x + this.imgLength * 2, this.posY);
+      }
+      if (this.x <= -this.imgLength) {
+        this.x = 0;
+      }
+      this.x -= this.velocity;
+      // requestAnimationFrame(this.draw())
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      this.draw();
+    }
+  }]);
+
+  return Background;
+}();
+
+exports.default = Background;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _game = __webpack_require__(3);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _background = __webpack_require__(6);
+var _background = __webpack_require__(1);
 
 var _background2 = _interopRequireDefault(_background);
 
@@ -93,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -105,19 +216,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _player = __webpack_require__(2);
+var _player = __webpack_require__(4);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _graveyard = __webpack_require__(4);
+var _graveyard = __webpack_require__(6);
 
 var _graveyard2 = _interopRequireDefault(_graveyard);
 
-var _zombie = __webpack_require__(5);
+var _zombie = __webpack_require__(0);
 
 var _zombie2 = _interopRequireDefault(_zombie);
 
-var _background = __webpack_require__(6);
+var _background = __webpack_require__(1);
 
 var _background2 = _interopRequireDefault(_background);
 
@@ -133,10 +244,10 @@ var Game = function () {
     this.gameCanvas = gameCanvas;
     this.player = new _player2.default({ position: [10, 10] });
     this.bullets = [];
-    this.zombies = [];
     this.bgctx = bgctx;
     this.createBg(bgctx);
     this.g = new _graveyard2.default(ctx);
+    this.zombies = this.g.zombies;
     this.z = new _zombie2.default(null, null, ctx);
   }
 
@@ -144,14 +255,14 @@ var Game = function () {
     key: 'start',
     value: function start() {
       this.draw();
-      this.g.spawnZombies();
+      this.g.zombies;
     }
   }, {
     key: 'createBg',
     value: function createBg(bgctx) {
       var bgimg = new Image();
       bgimg.src = "./app/assets/images/country.png";
-      this.bg = new _background2.default(this.bgctx, bgimg, -80, 890, 6.8);
+      this.bg = new _background2.default(this.bgctx, bgimg, -75, 890, 1.8);
     }
   }, {
     key: 'draw',
@@ -159,7 +270,9 @@ var Game = function () {
       var _this = this;
 
       this.player.update(this.ctx);
-      this.g.spawnZombies();
+      this.zombies.forEach(function (z) {
+        z.drawZombie(_this.ctx);
+      });
       this.player.bullets.forEach(function (b) {
         window.setTimeout(b.drawBullet(_this.ctx), 5000), setTimeout(b.move(), 5000);
       });
@@ -183,7 +296,7 @@ var Game = function () {
 exports.default = Game;
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -195,7 +308,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _bullets = __webpack_require__(3);
+var _bullets = __webpack_require__(5);
 
 var _bullets2 = _interopRequireDefault(_bullets);
 
@@ -214,15 +327,16 @@ var Player = function () {
     this.lift = -3;
     this.startX = canvas.width / 2;
     this.startY = canvas.height - 10;
-    this.dx = 4;
-    this.dy = 4;
+    this.dx = 6;
+    this.dy = 6;
     this.keys = [];
     this.height = 60;
     this.width = 60;
     this.jumping = false;
     this.bullets = [];
+    this.bulletDelay = 0;
     this.heroSprite = new Image();
-    this.heroSprite.src = "./app/assets/images/Hero-Guy-PNG/_Mode-Gun/02-Run/JK_P_Gun__Run_000.png";
+    this.heroSprite.src = "./app/assets/images/Hero-Guy-PNG/_Mode-Gun/03-Shot/JK_P_Gun__Attack_007.png";
   }
 
   _createClass(Player, [{
@@ -244,13 +358,18 @@ var Player = function () {
     value: function fireBullets(ctx) {
       var dx = this.dx;
       var dy = this.dy;
-      var newBullets = new _bullets2.default(this.startX, this.startY, dx, dy);
+      var newBullets = new _bullets2.default(this.startX + 20, this.startY + 10, dx, dy);
       this.bullets.push(newBullets);
+      this.bulletDelay = 18;
     }
   }, {
     key: "move",
-    value: function move() {
-      this.startX += this.dx;
+    value: function move(ctx) {
+      if (this.bulletDelay === 0) {
+        this.fireBullets(ctx);
+      } else {
+        this.bulletDelay--;
+      }
     }
   }, {
     key: "draw",
@@ -260,6 +379,10 @@ var Player = function () {
       if (this.land()) {
         this.jumping = false;
       }
+      this.bullets = this.bullets.filter(function (b) {
+        return b.posX < canvas.width + 20;
+      });
+      console.log(this.bullets);
     }
   }, {
     key: "hero",
@@ -317,8 +440,7 @@ var Player = function () {
         this.startX -= this.dx;
       }
       if (this.keys[32]) {
-        console.log("pew");
-        setTimeout(this.fireBullets(ctx), 5000);
+        this.move(ctx);
       }
       this.draw(ctx);
     }
@@ -330,7 +452,7 @@ var Player = function () {
 exports.default = Player;
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -353,15 +475,12 @@ var Bullets = function () {
     this.gone = false;
     this.posX = posX;
     this.posY = posY;
-    this.x = 5;
-    this.y = 5;
   }
 
   _createClass(Bullets, [{
     key: 'move',
     value: function move() {
-      // this.dx += 5
-      this.posX += 5;
+      this.posX += 3;
     }
   }, {
     key: 'destroyBullet',
@@ -373,9 +492,7 @@ var Bullets = function () {
     value: function drawBullet(ctx) {
       ctx.fillStyle = 'red';
       ctx.fillRect(this.posX + 20, this.posY + 30, this.dx, this.dy);
-      // ctx.clearRect(this.posX-20, this.posY+30, this.dx, this.dy);
       this.move();
-      this.destroyBullet();
     }
   }]);
 
@@ -385,7 +502,7 @@ var Bullets = function () {
 exports.default = Bullets;
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,7 +514,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _zombie = __webpack_require__(5);
+var _zombie = __webpack_require__(0);
 
 var _zombie2 = _interopRequireDefault(_zombie);
 
@@ -423,6 +540,7 @@ var GraveYard = function () {
     value: function spawnZombies() {
       var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
       this.zombies.push(zom);
+      // return this.zombies
     }
   }]);
 
@@ -430,118 +548,6 @@ var GraveYard = function () {
 }();
 
 exports.default = GraveYard;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Zombie = function () {
-  function Zombie(startX, startY, ctx) {
-    _classCallCheck(this, Zombie);
-
-    this.ctx = ctx;
-    this.startX = canvas.width - 5;
-    this.startY = canvas.height;
-    this.disappear = false;
-    this.dx = 30;
-    this.dy = 30;
-    this.update(ctx);
-  }
-
-  _createClass(Zombie, [{
-    key: 'drawZombie',
-    value: function drawZombie(ctx) {
-      ctx.fillStyle = 'black';
-      ctx.fillRect(this.startX, this.startY, this.dx, this.dy);
-      this.move();
-    }
-  }, {
-    key: 'update',
-    value: function update(ctx) {
-      this.drawZombie(this.ctx);
-    }
-  }, {
-    key: 'death',
-    value: function death() {
-      this.disappear = true;
-    }
-  }, {
-    key: 'move',
-    value: function move() {
-      this.startX -= 4;
-    }
-  }]);
-
-  return Zombie;
-}();
-
-exports.default = Zombie;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Background = function () {
-  function Background(ctx, img, posY, imgLength, velocity) {
-    _classCallCheck(this, Background);
-
-    this.ctx = ctx;
-    this.img = img;
-    this.x = 0;
-    this.velocity = velocity;
-    this.posY = posY;
-    this.imgLength = imgLength;
-    // this.draw = this.draw.bind(this)
-  }
-
-  _createClass(Background, [{
-    key: "draw",
-    value: function draw() {
-      this.ctx.clearRect(0, 0, 800, 400);
-      this.ctx.drawImage(this.img, this.x, this.posY);
-      this.ctx.drawImage(this.img, this.x + this.imgLength, this.posY);
-      if (this.imgLength < 800) {
-        this.ctx.drawImage(this.img, this.x + this.imgLength * 2, this.posY);
-      }
-      if (this.x <= -this.imgLength) {
-        this.x = 0;
-      }
-      this.x -= this.velocity;
-      // requestAnimationFrame(this.draw())
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      this.draw();
-    }
-  }]);
-
-  return Background;
-}();
-
-exports.default = Background;
 
 /***/ })
 /******/ ]);
