@@ -80,7 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
   var gameCanvas = document.getElementById('canvas');
   var ctx = gameCanvas.getContext('2d');
 
-  var game = new _game2.default(ctx, gameCanvas);
+  // const bgCanvas = document.getElementById('canvas');
+  // const bgctx = bgCanvas.getContext('2d')
+
+  var game = new _game2.default(ctx, gameCanvas
+  // bgctx
+  );
 
   game.start();
 });
@@ -110,6 +115,10 @@ var _zombie = __webpack_require__(5);
 
 var _zombie2 = _interopRequireDefault(_zombie);
 
+var _background = __webpack_require__(6);
+
+var _background2 = _interopRequireDefault(_background);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -123,6 +132,7 @@ var Game = function () {
     this.player = new _player2.default({ position: [10, 10] });
     this.bullets = [];
     this.zombies = [];
+    // this.createBg(ctx)
     this.g = new _graveyard2.default(ctx);
     this.z = new _zombie2.default(null, null, ctx);
   }
@@ -132,6 +142,13 @@ var Game = function () {
     value: function start() {
       this.draw();
       this.g.spawnZombies();
+    }
+  }, {
+    key: 'createBg',
+    value: function createBg(ctx) {
+      var bgimg = new Image();
+      bgimg.src = "./app/assets/images/Graveyard2.png";
+      this.bg = new _background2.default(ctx, bgimg, -550, 1841, 2.8);
     }
   }, {
     key: 'draw',
@@ -144,6 +161,7 @@ var Game = function () {
         window.setTimeout(b.drawBullet(_this.ctx), 5000), setTimeout(b.move(), 5000);
       });
       requestAnimationFrame(this.draw.bind(this));
+      this.bg.draw();
     }
   }, {
     key: 'playerActions',
@@ -466,6 +484,54 @@ var Zombie = function () {
 }();
 
 exports.default = Zombie;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Background = function () {
+  function Background(ctx, img, posY, imgLength, velocity) {
+    _classCallCheck(this, Background);
+
+    this.ctx = ctx;
+    this.img = img;
+    this.x = 0;
+    this.velocity = velocity;
+    this.posY = posY;
+    this.imgLength = imgLength;
+  }
+
+  _createClass(Background, [{
+    key: "draw",
+    value: function draw() {
+      this.ctx.clearRect(0, 0, 800, 400);
+      this.ctx.drawImage(this.img, this.x, this.posY);
+      this.ctx.drawImage(this.img, this.x + this.imgLength, this.posY);
+      if (this.imgLength < 800) {
+        this.ctx.drawImage(this.img, this.x + this.imgLength * 2, this.posY);
+      }
+      if (this.x <= -this.imgLength) {
+        this.x = 0;
+      }
+      this.x -= this.velocity;
+    }
+  }]);
+
+  return Background;
+}();
+
+exports.default = Background;
 
 /***/ })
 /******/ ]);
