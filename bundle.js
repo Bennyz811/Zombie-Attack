@@ -90,7 +90,7 @@ var Zombie = function () {
     this.dy = 65;
     this.zombieSprite = new Image();
     this.zombieSprite.src = "./app/assets/images/walk.png";
-    this.hp = 2;
+    this.hp = 10;
     this.internalClick = 0;
   }
 
@@ -104,7 +104,6 @@ var Zombie = function () {
       // ctx.fillRect(this.startX, this.startY, this.x, this.y)
       ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY - 40, this.dx, this.dy);
       this.move();
-      this.deleteSelf();
     }
   }, {
     key: "update",
@@ -119,7 +118,7 @@ var Zombie = function () {
   }, {
     key: "move",
     value: function move() {
-      this.startX -= 0.8;
+      this.startX -= [0.8, 2, 1, 5][Math.floor(Math.random() * 4)];
     }
   }]);
 
@@ -258,15 +257,13 @@ var Game = function () {
     this.g = new _graveyard2.default(ctx);
     this.zombies = this.g.zombies;
     this.damages();
-    this.z = new _zombie2.default(null, null, ctx);
+    this.frameCount = 0;
   }
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
       this.draw();
-      this.update();
-      // this.g.zombies
     }
   }, {
     key: 'createBg',
@@ -295,7 +292,6 @@ var Game = function () {
             z.hp--;
             var idx = _this.player.bullets.indexOf(b);
             _this.player.bullets.splice(b, 1);
-            console.log(z.hp);
           } else if (_this.colliding(z, _this.player)) {
             _this.stoptoEat();
             _this.player.hp--;
@@ -307,12 +303,11 @@ var Game = function () {
         this.gameOver = true;
         this.gameOverScreen(this.ctx);
       }
-      this.zombies.forEach(function (z) {
+      this.zombies.forEach(function (z, i) {
         if (z.hp <= 0) {
-          _this.zombies.splice(z, 1);
+          _this.zombies.splice(i, 1);
         }
       });
-      // console.log(this.player.hp);
     }
   }, {
     key: 'draw',
@@ -320,28 +315,22 @@ var Game = function () {
       var _this2 = this;
 
       this.player.update(this.ctx);
-      this.zombies = this.zombies.filter(function (z) {
-        return z.startX > -50;
-      });
-      this.zombies.forEach(function (z) {
+      // this.zombies = this.zombies.filter(z => {return z.startX > -50})
+      this.zombies.forEach(function (z, i) {
+        if (z.startX < -50) {
+          _this2.zombies.splice(i, 1);
+        }
         z.update(_this2.ctx);
       });
-      // this.zombies.forEach(z => {z.drawZombie(this.ctx)})
       this.player.bullets.forEach(function (b) {
         b.drawBullet(_this2.ctx);
         b.move();
       });
       this.damages();
       // debugger
+      this.g.spawnZombies();
       this.bg.draw();
       requestAnimationFrame(this.draw.bind(this));
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-      if (this.zombies.length === 0) {
-        this.g.spawnZombies();
-      }
     }
   }, {
     key: 'gameOverScreen',
@@ -600,20 +589,15 @@ var GraveYard = function () {
     this.dx = 4;
     this.dy = 4;
     this.spawnZombies();
-    this.update();
+    // this.update();
   }
 
   _createClass(GraveYard, [{
     key: 'spawnZombies',
     value: function spawnZombies() {
       var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
-      this.zombies.push(zom);
-    }
-  }, {
-    key: 'update',
-    value: function update(ctx) {
       if (this.zombies.length === 0) {
-        this.spawnZombies();
+        this.zombies.push(zom);
       }
     }
   }]);
