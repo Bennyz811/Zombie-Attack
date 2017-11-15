@@ -90,7 +90,7 @@ var Zombie = function () {
     this.dy = 65;
     this.zombieSprite = new Image();
     this.zombieSprite.src = "./app/assets/images/walk.png";
-    this.hp = 11;
+    this.hp = 2;
     this.internalClick = 0;
   }
 
@@ -104,6 +104,7 @@ var Zombie = function () {
       // ctx.fillRect(this.startX, this.startY, this.x, this.y)
       ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY - 40, this.dx, this.dy);
       this.move();
+      this.deleteSelf();
     }
   }, {
     key: "update",
@@ -251,12 +252,12 @@ var Game = function () {
     this.ctx = ctx;
     this.gameCanvas = gameCanvas;
     this.player = new _player2.default({ position: [10, 10] });
-    this.bullets = [];
     this.bgctx = bgctx;
     this.createBg(bgctx);
     this.gameOver = false;
     this.g = new _graveyard2.default(ctx);
     this.zombies = this.g.zombies;
+    this.damages();
     this.z = new _zombie2.default(null, null, ctx);
   }
 
@@ -264,7 +265,8 @@ var Game = function () {
     key: 'start',
     value: function start() {
       this.draw();
-      this.g.zombies;
+      this.update();
+      // this.g.zombies
     }
   }, {
     key: 'createBg',
@@ -276,10 +278,10 @@ var Game = function () {
   }, {
     key: 'colliding',
     value: function colliding(a, b) {
-      if (a.startY + a.dy < b.startY || a.startY > b.startY + b.dy || a.startX + a.dx < b.startX || b.startX > a.startX + a.dx) {
-        return false;
-      } else {
+      if (a.startX < b.startX) {
         return true;
+      } else {
+        return false;
       }
     }
   }, {
@@ -288,10 +290,14 @@ var Game = function () {
       var _this = this;
 
       this.zombies.forEach(function (z) {
-        return _this.bullets.forEach(function (b) {
+        _this.player.bullets.forEach(function (b) {
           if (_this.colliding(z, b)) {
             z.hp--;
+            var idx = _this.player.bullets.indexOf(b);
+            _this.player.bullets.splice(b, 1);
+            console.log(z.hp);
           } else if (_this.colliding(z, _this.player)) {
+            _this.stoptoEat();
             _this.player.hp--;
           }
         });
@@ -299,14 +305,14 @@ var Game = function () {
 
       if (this.player.hp <= 0) {
         this.gameOver = true;
-        gameOverScreen(ctx);
+        this.gameOverScreen(this.ctx);
       }
       this.zombies.forEach(function (z) {
         if (z.hp <= 0) {
-          _this.z.deleteSelf();
+          _this.zombies.splice(z, 1);
         }
       });
-      console.log(this.player.hp);
+      // console.log(this.player.hp);
     }
   }, {
     key: 'draw',
@@ -318,21 +324,42 @@ var Game = function () {
         return z.startX > -50;
       });
       this.zombies.forEach(function (z) {
-        z.drawZombie(_this2.ctx);
+        z.update(_this2.ctx);
       });
+      // this.zombies.forEach(z => {z.drawZombie(this.ctx)})
       this.player.bullets.forEach(function (b) {
         b.drawBullet(_this2.ctx);
         b.move();
       });
-      requestAnimationFrame(this.draw.bind(this));
+      this.damages();
+      // debugger
       this.bg.draw();
+      requestAnimationFrame(this.draw.bind(this));
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      if (this.zombies.length === 0) {
+        this.g.spawnZombies();
+      }
     }
   }, {
     key: 'gameOverScreen',
     value: function gameOverScreen(ctx) {
       this.player = {};
       ctx.fillStyle = 'white';
-      ctx.fillText("You've been eaten");
+      ctx.fillText("You've been eaten", 200, 400);
+    }
+  }, {
+    key: 'stoptoEat',
+    value: function stoptoEat() {
+      var _this3 = this;
+
+      this.zombies.forEach(function (z) {
+        if (z.startX === _this3.player.startX) {
+          z.startX = _this3.player.startX;
+        }
+      });
     }
   }]);
 
@@ -532,6 +559,7 @@ var Bullets = function () {
       ctx.fillStyle = 'red';
       ctx.fillRect(this.startX + 20, this.startY + 30, this.dx, this.dy);
       this.move();
+      this.destroyBullet();
     }
   }]);
 
@@ -572,6 +600,7 @@ var GraveYard = function () {
     this.dx = 4;
     this.dy = 4;
     this.spawnZombies();
+    this.update();
   }
 
   _createClass(GraveYard, [{
@@ -579,6 +608,13 @@ var GraveYard = function () {
     value: function spawnZombies() {
       var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
       this.zombies.push(zom);
+    }
+  }, {
+    key: 'update',
+    value: function update(ctx) {
+      if (this.zombies.length === 0) {
+        this.spawnZombies();
+      }
     }
   }]);
 
