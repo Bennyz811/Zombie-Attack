@@ -95,13 +95,9 @@ var Zombie = function () {
   }
 
   _createClass(Zombie, [{
-    key: "moveSprite",
-    value: function moveSprite() {}
-  }, {
     key: "drawZombie",
     value: function drawZombie(ctx) {
       ctx.fillStyle = 'black';
-      // ctx.fillRect(this.startX, this.startY, this.x, this.y)
       ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY - 40, this.dx, this.dy);
       this.move();
     }
@@ -118,7 +114,7 @@ var Zombie = function () {
   }, {
     key: "move",
     value: function move() {
-      this.startX -= [0.8, 2, 1, 5][Math.floor(Math.random() * 4)];
+      this.startX -= [0.8, 3, 1, 5][Math.floor(Math.random() * 4)];
     }
   }]);
 
@@ -273,9 +269,18 @@ var Game = function () {
       this.bg = new _background2.default(this.bgctx, bgimg, -75, 890, 1.8);
     }
   }, {
-    key: 'colliding',
-    value: function colliding(a, b) {
-      if (a.startX < b.startX) {
+    key: 'bulletCollision',
+    value: function bulletCollision(a, b) {
+      if (a.startX < b.startX + b.dx && a.startX + a.dx > b.startX) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }, {
+    key: 'playerCollision',
+    value: function playerCollision(z, p) {
+      if (z.startX < p.startX + p.dx && z.startX + z.dx > p.startX && z.startY < p.startY + p.dy && z.dy + z.startY > p.startY) {
         return true;
       } else {
         return false;
@@ -288,15 +293,20 @@ var Game = function () {
 
       this.zombies.forEach(function (z) {
         _this.player.bullets.forEach(function (b) {
-          if (_this.colliding(z, b)) {
+          if (_this.bulletCollision(z, b)) {
             z.hp--;
             var idx = _this.player.bullets.indexOf(b);
             _this.player.bullets.splice(b, 1);
-          } else if (_this.colliding(z, _this.player)) {
-            _this.stoptoEat();
-            _this.player.hp--;
+            console.log(z.hp);
           }
         });
+      });
+      this.zombies.forEach(function (z) {
+        if (_this.playerCollision(z, _this.player)) {
+          // this.stoptoEat()
+          _this.player.hp--;
+          console.log(_this.player.hp);
+        }
       });
 
       if (this.player.hp <= 0) {
@@ -315,7 +325,6 @@ var Game = function () {
       var _this2 = this;
 
       this.player.update(this.ctx);
-      // this.zombies = this.zombies.filter(z => {return z.startX > -50})
       this.zombies.forEach(function (z, i) {
         if (z.startX < -50) {
           _this2.zombies.splice(i, 1);
@@ -327,7 +336,6 @@ var Game = function () {
         b.move();
       });
       this.damages();
-      // debugger
       this.g.spawnZombies();
       this.bg.draw();
       requestAnimationFrame(this.draw.bind(this));
@@ -337,7 +345,7 @@ var Game = function () {
     value: function gameOverScreen(ctx) {
       this.player = {};
       ctx.fillStyle = 'white';
-      ctx.fillText("You've been eaten", 200, 400);
+      ctx.fillText("You've been eaten", 200, 350);
     }
   }, {
     key: 'stoptoEat',
@@ -589,7 +597,6 @@ var GraveYard = function () {
     this.dx = 4;
     this.dy = 4;
     this.spawnZombies();
-    // this.update();
   }
 
   _createClass(GraveYard, [{
