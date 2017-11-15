@@ -85,30 +85,38 @@ var Zombie = function () {
     this.ctx = ctx;
     this.startX = canvas.width;
     this.startY = canvas.height - 20;
-    this.disappear = false;
-    this.x = 20;
-    this.y = 20;
+    this.destroy = false;
+    this.dx = 60;
+    this.dy = 65;
+    this.zombieSprite = new Image();
+    this.zombieSprite.src = "./app/assets/images/walk.png";
+    this.hp = 11;
+    this.internalClick = 0;
   }
 
   _createClass(Zombie, [{
-    key: 'drawZombie',
+    key: "moveSprite",
+    value: function moveSprite() {}
+  }, {
+    key: "drawZombie",
     value: function drawZombie(ctx) {
       ctx.fillStyle = 'black';
-      ctx.fillRect(this.startX, this.startY, this.x, this.y);
+      // ctx.fillRect(this.startX, this.startY, this.x, this.y)
+      ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY - 40, this.dx, this.dy);
       this.move();
     }
   }, {
-    key: 'update',
+    key: "update",
     value: function update(ctx) {
       this.drawZombie(ctx);
     }
   }, {
-    key: 'death',
-    value: function death() {
-      this.disappear = true;
+    key: "deleteSelf",
+    value: function deleteSelf() {
+      this.destroy = true;
     }
   }, {
-    key: 'move',
+    key: "move",
     value: function move() {
       this.startX -= 0.8;
     }
@@ -246,6 +254,7 @@ var Game = function () {
     this.bullets = [];
     this.bgctx = bgctx;
     this.createBg(bgctx);
+    this.gameOver = false;
     this.g = new _graveyard2.default(ctx);
     this.zombies = this.g.zombies;
     this.z = new _zombie2.default(null, null, ctx);
@@ -265,28 +274,65 @@ var Game = function () {
       this.bg = new _background2.default(this.bgctx, bgimg, -75, 890, 1.8);
     }
   }, {
-    key: 'draw',
-    value: function draw() {
+    key: 'colliding',
+    value: function colliding(a, b) {
+      if (a.startY + a.dy < b.startY || a.startY > b.startY + b.dy || a.startX + a.dx < b.startX || b.startX > a.startX + a.dx) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }, {
+    key: 'damages',
+    value: function damages() {
       var _this = this;
 
-      this.player.update(this.ctx);
       this.zombies.forEach(function (z) {
-        z.drawZombie(_this.ctx);
+        return _this.bullets.forEach(function (b) {
+          if (_this.colliding(z, b)) {
+            z.hp--;
+          } else if (_this.colliding(z, _this.player)) {
+            _this.player.hp--;
+          }
+        });
+      });
+
+      if (this.player.hp <= 0) {
+        this.gameOver = true;
+        gameOverScreen(ctx);
+      }
+      this.zombies.forEach(function (z) {
+        if (z.hp <= 0) {
+          _this.z.deleteSelf();
+        }
+      });
+      console.log(this.player.hp);
+    }
+  }, {
+    key: 'draw',
+    value: function draw() {
+      var _this2 = this;
+
+      this.player.update(this.ctx);
+      this.zombies = this.zombies.filter(function (z) {
+        return z.startX > -50;
+      });
+      this.zombies.forEach(function (z) {
+        z.drawZombie(_this2.ctx);
       });
       this.player.bullets.forEach(function (b) {
-        window.setTimeout(b.drawBullet(_this.ctx), 5000), setTimeout(b.move(), 5000);
+        b.drawBullet(_this2.ctx);
+        b.move();
       });
       requestAnimationFrame(this.draw.bind(this));
       this.bg.draw();
     }
   }, {
-    key: 'playerActions',
-    value: function playerActions() {
-      var _this2 = this;
-
-      this.player.bullets.forEach(function (b) {
-        b.draw(_this2.ctx);
-      });
+    key: 'gameOverScreen',
+    value: function gameOverScreen(ctx) {
+      this.player = {};
+      ctx.fillStyle = 'white';
+      ctx.fillText("You've been eaten");
     }
   }]);
 
@@ -335,6 +381,7 @@ var Player = function () {
     this.jumping = false;
     this.bullets = [];
     this.bulletDelay = 0;
+    this.hp = 10;
     this.heroSprite = new Image();
     this.heroSprite.src = "./app/assets/images/Hero-Guy-PNG/_Mode-Gun/03-Shot/JK_P_Gun__Attack_007.png";
   }
@@ -380,22 +427,14 @@ var Player = function () {
         this.jumping = false;
       }
       this.bullets = this.bullets.filter(function (b) {
-        return b.posX < canvas.width + 20;
+        return b.startX < canvas.width + 20;
       });
-      console.log(this.bullets);
     }
   }, {
     key: "hero",
     value: function hero() {
       this.heroSprite.addEventListener("load", this.loadImage, false);
     }
-    //
-    // animate(){
-    //   draw();
-    //   update();
-    //   requestAnimationFrame(this.heroSprite.onload);
-    // }
-
   }, {
     key: "jump",
     value: function jump() {
@@ -467,20 +506,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Bullets = function () {
-  function Bullets(posX, posY, dx, dy) {
+  function Bullets(startX, startY, dx, dy) {
     _classCallCheck(this, Bullets);
 
     this.dx = dx;
     this.dy = dy;
     this.gone = false;
-    this.posX = posX;
-    this.posY = posY;
+    this.startX = startX;
+    this.startY = startY;
   }
 
   _createClass(Bullets, [{
     key: 'move',
     value: function move() {
-      this.posX += 3;
+      this.startX += 3;
     }
   }, {
     key: 'destroyBullet',
@@ -491,7 +530,7 @@ var Bullets = function () {
     key: 'drawBullet',
     value: function drawBullet(ctx) {
       ctx.fillStyle = 'red';
-      ctx.fillRect(this.posX + 20, this.posY + 30, this.dx, this.dy);
+      ctx.fillRect(this.startX + 20, this.startY + 30, this.dx, this.dy);
       this.move();
     }
   }]);
@@ -540,7 +579,6 @@ var GraveYard = function () {
     value: function spawnZombies() {
       var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
       this.zombies.push(zom);
-      // return this.zombies
     }
   }]);
 
