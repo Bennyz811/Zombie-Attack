@@ -8,10 +8,18 @@ canvas {
   /*z-index: 2;*/
 }
 
-background-canvas{
-
+canvas-container{
+  width: 100%
 }
 
 body{
   background: #504545;
 }
+
+main-container h1{
+  font-size: 25px;
+  color: blue;
+  
+}
+
+
