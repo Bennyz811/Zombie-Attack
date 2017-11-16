@@ -89,7 +89,7 @@ var Zombie = function () {
     this.dx = 60;
     this.dy = 65;
     this.zombieSprite = new Image();
-    this.zombieSprite.src = "./app/assets/images/walk.png";
+    this.zombieSprite.src = "app/assets/images/walk.png";
     this.hp = 10;
     this.internalClick = 0;
   }
@@ -280,7 +280,7 @@ var Game = function () {
     key: 'createBg',
     value: function createBg(bgctx) {
       var bgimg = new Image();
-      bgimg.src = "./app/assets/images/country.png";
+      bgimg.src = "app/assets/images/country.png";
       this.bg = new _background2.default(this.bgctx, bgimg, -75, 890, 1.8);
     }
   }, {
