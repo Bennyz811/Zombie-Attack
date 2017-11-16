@@ -253,13 +253,28 @@ var Game = function () {
     this.g = new _graveyard2.default(ctx);
     this.zombies = this.g.zombies;
     this.damages();
+    this.pause = false;
     this.frameCount = 0;
+    this.pauseButton();
   }
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
       this.draw();
+    }
+  }, {
+    key: 'pauseButton',
+    value: function pauseButton() {
+      var _this = this;
+
+      document.addEventListener("keydown", function (e) {
+        e.preventDefault();
+        if (e.keyCode === 80) {
+          _this.pause = !_this.pause;
+          console.log('pppppp');
+        }
+      });
     }
   }, {
     key: 'createBg',
@@ -289,23 +304,22 @@ var Game = function () {
   }, {
     key: 'damages',
     value: function damages() {
-      var _this = this;
+      var _this2 = this;
 
       this.zombies.forEach(function (z) {
-        _this.player.bullets.forEach(function (b) {
-          if (_this.bulletCollision(z, b)) {
+        _this2.player.bullets.forEach(function (b) {
+          if (_this2.bulletCollision(z, b)) {
             z.hp--;
-            var idx = _this.player.bullets.indexOf(b);
-            _this.player.bullets.splice(b, 1);
-            console.log(z.hp);
+            var idx = _this2.player.bullets.indexOf(b);
+            _this2.player.bullets.splice(b, 1);
           }
         });
       });
       this.zombies.forEach(function (z) {
-        if (_this.playerCollision(z, _this.player)) {
+        if (_this2.playerCollision(z, _this2.player)) {
           // this.stoptoEat()
-          _this.player.hp--;
-          console.log(_this.player.hp);
+          _this2.player.hp--;
+          console.log(_this2.player.hp);
         }
       });
 
@@ -315,24 +329,29 @@ var Game = function () {
       }
       this.zombies.forEach(function (z, i) {
         if (z.hp <= 0) {
-          _this.zombies.splice(i, 1);
+          _this2.player.killCount++;
+          _this2.zombies.splice(i, 1);
         }
       });
     }
   }, {
     key: 'draw',
     value: function draw() {
-      var _this2 = this;
+      var _this3 = this;
 
+      if (this.pause) {
+        this.ctx.fillText('Paused', 300, 400);
+        return;
+      }
       this.player.update(this.ctx);
       this.zombies.forEach(function (z, i) {
         if (z.startX < -50) {
-          _this2.zombies.splice(i, 1);
+          _this3.zombies.splice(i, 1);
         }
-        z.update(_this2.ctx);
+        z.update(_this3.ctx);
       });
       this.player.bullets.forEach(function (b) {
-        b.drawBullet(_this2.ctx);
+        b.drawBullet(_this3.ctx);
         b.move();
       });
       this.damages();
@@ -350,11 +369,11 @@ var Game = function () {
   }, {
     key: 'stoptoEat',
     value: function stoptoEat() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.zombies.forEach(function (z) {
-        if (z.startX === _this3.player.startX) {
-          z.startX = _this3.player.startX;
+        if (z.startX === _this4.player.startX) {
+          z.startX = _this4.player.startX;
         }
       });
     }
@@ -406,6 +425,8 @@ var Player = function () {
     this.bullets = [];
     this.bulletDelay = 0;
     this.hp = 10;
+    this.pause = false;
+    this.killCount = 0;
     this.heroSprite = new Image();
     this.heroSprite.src = "./app/assets/images/Hero-Guy-PNG/_Mode-Gun/03-Shot/JK_P_Gun__Attack_007.png";
   }
@@ -505,6 +526,10 @@ var Player = function () {
       if (this.keys[32]) {
         this.move(ctx);
       }
+      // if(this.keys[80]){
+      //   this.pause = !this.pause
+      //   console.log('pause');
+      // }
       this.draw(ctx);
     }
   }]);
@@ -581,6 +606,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _zombie = __webpack_require__(0);
 
 var _zombie2 = _interopRequireDefault(_zombie);
+
+var _player = __webpack_require__(4);
+
+var _player2 = _interopRequireDefault(_player);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
