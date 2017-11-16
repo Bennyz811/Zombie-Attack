@@ -428,7 +428,7 @@ var Player = function () {
     this.pause = false;
     this.killCount = 0;
     this.heroSprite = new Image();
-    this.heroSprite.src = "app/assets/images/Hero-Guy-PNG/_Mode-Gun/03-Shot/JK_P_Gun__Attack_007.png";
+    this.heroSprite.src = "app/assets/images/heroguy/gun/03-Shot/07.png";
   }
 
   _createClass(Player, [{
