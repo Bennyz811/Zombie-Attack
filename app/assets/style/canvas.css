@@ -19,7 +19,13 @@ body{
 main-container h1{
   font-size: 25px;
   color: blue;
-  
 }
 
+.main-container{
+  text-align: center;
+}
 
+.canvas-container{
+  display: flex;
+  justify-content: center;
+}
