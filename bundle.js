@@ -103,7 +103,7 @@ var Player = function () {
     this.jumping = false;
     this.bullets = [];
     this.bulletDelay = 0;
-    this.hp = 10;
+    this.hp = 100;
     this.pause = false;
     this.killCount = 0;
     this.heroSprite = new Image();
@@ -448,7 +448,7 @@ var Game = function () {
   }, {
     key: 'playerCollision',
     value: function playerCollision(z, p) {
-      if (z.startX < p.startX + p.dx && z.startX + z.dx > p.startX && z.startY < p.startY + p.dy && z.dy + z.startY > p.startY) {
+      if (z.startX < p.startX + p.dx && z.startX + z.dx > p.startX && z.startY - 40 < p.startY + p.dy && z.dy + z.startY > p.startY) {
         return true;
       } else {
         return false;
@@ -470,7 +470,7 @@ var Game = function () {
       });
       this.zombies.forEach(function (z) {
         if (_this2.playerCollision(z, _this2.player)) {
-          // this.stoptoEat()
+          _this2.stoptoEat();
           _this2.player.hp--;
           console.log(_this2.player.hp);
         }
