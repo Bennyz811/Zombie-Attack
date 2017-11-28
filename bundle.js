@@ -103,7 +103,7 @@ var Player = function () {
     this.jumping = false;
     this.bullets = [];
     this.bulletDelay = 0;
-    this.hp = 100;
+    this.hp = 1000;
     this.pause = false;
     this.killCount = 0;
     this.heroSprite = new Image();
@@ -247,6 +247,7 @@ var Zombie = function () {
     this.zombieSprite.src = "app/assets/images/walk.png";
     this.hp = 10;
     this.internalClick = 0;
+    this.stop = this.stop.bind(this);
   }
 
   _createClass(Zombie, [{
@@ -268,7 +269,13 @@ var Zombie = function () {
   }, {
     key: "move",
     value: function move() {
-      this.startX -= [0.8, 3, 1, 5][Math.floor(Math.random() * 4)];
+      this.startX -= 0.8;
+      // [0.8, 3, 1, 5][Math.floor(Math.random() * 4)];
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.startX += 0.8;
     }
   }]);
 
@@ -448,7 +455,7 @@ var Game = function () {
   }, {
     key: 'playerCollision',
     value: function playerCollision(z, p) {
-      if (z.startX < p.startX + p.dx && z.startX + z.dx > p.startX && z.startY - 40 < p.startY + p.dy && z.dy + z.startY > p.startY) {
+      if (z.startX - 25 < p.startX + p.dx && z.startX + z.dx > p.startX && z.startY - 40 < p.startY + p.dy && z.dy + z.startY > p.startY) {
         return true;
       } else {
         return false;
@@ -523,13 +530,11 @@ var Game = function () {
   }, {
     key: 'stoptoEat',
     value: function stoptoEat() {
-      var _this4 = this;
-
       this.zombies.forEach(function (z) {
-        if (z.startX === _this4.player.startX) {
-          z.startX = _this4.player.startX;
-        }
-      });
+        // if (z.startX === this.player.startX){
+        z.stop();
+        // }
+      }.bind(this));
     }
   }]);
 
