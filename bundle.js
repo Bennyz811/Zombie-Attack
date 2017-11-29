@@ -249,7 +249,7 @@ var Zombie = function () {
     this.zombieSprite.src = "app/assets/images/walk.png";
     this.hp = 10;
     this.internalClick = 0;
-    this.speed = [0.8, 3, 1.2, 2, 4, 5][Math.floor(Math.random() * 6)];
+    this.speed = [0.8, 3, 1.2, 2, 4, 5, 10][Math.floor(Math.random() * 7)];
     this.stop = this.stop.bind(this);
   }
 
@@ -478,9 +478,9 @@ var Game = function () {
         }
       });
 
-      if (this.player.hp <= 0) {
+      if (this.player.hp < 0) {
         this.gameOver = true;
-        this.gameOverScreen(this.ctx);
+        // this.gameOverScreen(this.ctx);
       }
       this.zombies.forEach(function (z, i) {
         if (z.hp <= 0) {
@@ -501,26 +501,27 @@ var Game = function () {
       } else {
         if (this.gameOver) {
           this.player = {};
-          this.player.bullets = [];
           this.player.killCount = 0;
+          this.player.bullets = [];
+          this.gameOverScreen(this.ctx);
           // this.zombies = [];
         } else {
           this.player.update(this.ctx);
+          this.zombies.forEach(function (z, i) {
+            if (z.startX < -50) {
+              _this2.zombies.splice(i, 1);
+            }
+            z.update(_this2.ctx);
+          });
+          this.player.bullets.forEach(function (b) {
+            b.drawBullet(_this2.ctx);
+            b.move();
+          });
+          this.score();
+          this.damages();
+          this.g.spawnZombies();
+          this.bg.draw();
         }
-        this.zombies.forEach(function (z, i) {
-          if (z.startX < -50) {
-            _this2.zombies.splice(i, 1);
-          }
-          z.update(_this2.ctx);
-        });
-        this.player.bullets.forEach(function (b) {
-          b.drawBullet(_this2.ctx);
-          b.move();
-        });
-        this.score();
-        this.damages();
-        this.g.spawnZombies();
-        this.bg.draw();
       }
       requestAnimationFrame(this.draw.bind(this));
     }
