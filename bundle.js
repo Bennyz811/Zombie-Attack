@@ -103,7 +103,7 @@ var Player = function () {
     this.jumping = false;
     this.bullets = [];
     this.bulletDelay = 0;
-    this.hp = 1000;
+    this.hp = 100;
     this.pause = false;
     this.killCount = 0;
     this.heroSprite = new Image();
@@ -416,7 +416,7 @@ var Game = function () {
     this.damages();
     this.pause = false;
     this.frameCount = 0;
-    this.pauseButton();
+    this.listeners();
   }
 
   _createClass(Game, [{
@@ -425,16 +425,9 @@ var Game = function () {
       this.draw();
     }
   }, {
-    key: 'pauseButton',
-    value: function pauseButton() {
-      var _this = this;
-
-      document.addEventListener("keydown", function (e) {
-        e.preventDefault();
-        if (e.keyCode === 80) {
-          _this.pause = !_this.pause;
-        }
-      });
+    key: 'pauseGame',
+    value: function pauseGame() {
+      this.pause = !this.pause;
     }
   }, {
     key: 'createBg',
@@ -464,22 +457,22 @@ var Game = function () {
   }, {
     key: 'damages',
     value: function damages() {
-      var _this2 = this;
+      var _this = this;
 
       this.zombies.forEach(function (z) {
-        _this2.player.bullets.forEach(function (b) {
-          if (_this2.bulletCollision(z, b)) {
+        _this.player.bullets.forEach(function (b) {
+          if (_this.bulletCollision(z, b)) {
             z.hp--;
-            var idx = _this2.player.bullets.indexOf(b);
-            _this2.player.bullets.splice(b, 1);
+            var idx = _this.player.bullets.indexOf(b);
+            _this.player.bullets.splice(b, 1);
           }
         });
       });
       this.zombies.forEach(function (z) {
-        if (_this2.playerCollision(z, _this2.player)) {
-          _this2.stoptoEat();
-          _this2.player.hp--;
-          console.log(_this2.player.hp);
+        if (_this.playerCollision(z, _this.player)) {
+          _this.stoptoEat();
+          _this.player.hp--;
+          console.log(_this.player.hp);
         }
       });
 
@@ -489,30 +482,37 @@ var Game = function () {
       }
       this.zombies.forEach(function (z, i) {
         if (z.hp <= 0) {
-          _this2.player.killCount++;
-          _this2.zombies.splice(i, 1);
+          _this.player.killCount++;
+          _this.zombies.splice(i, 1);
         }
       });
     }
   }, {
     key: 'draw',
     value: function draw() {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.pause) {
         this.ctx.font = '50px serif';
-        this.ctx.fillText('Paused', 600, 400);
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText('Paused', 300, 200);
         return;
       }
-      this.player.update(this.ctx);
+      if (this.gameOver) {
+        this.player = {};
+        this.player.bullets = [];
+      } else {
+        this.player.update(this.ctx);
+      }
+
       this.zombies.forEach(function (z, i) {
         if (z.startX < -50) {
-          _this3.zombies.splice(i, 1);
+          _this2.zombies.splice(i, 1);
         }
-        z.update(_this3.ctx);
+        z.update(_this2.ctx);
       });
       this.player.bullets.forEach(function (b) {
-        b.drawBullet(_this3.ctx);
+        b.drawBullet(_this2.ctx);
         b.move();
       });
       this.damages();
@@ -524,8 +524,9 @@ var Game = function () {
     key: 'gameOverScreen',
     value: function gameOverScreen(ctx) {
       this.player = {};
+      ctx.font = '50px serif';
       ctx.fillStyle = 'white';
-      ctx.fillText("You've been eaten", 200, 350);
+      ctx.fillText("You've been eaten", 200, 200);
     }
   }, {
     key: 'stoptoEat',
@@ -535,6 +536,29 @@ var Game = function () {
         z.stop();
         // }
       }.bind(this));
+    }
+  }, {
+    key: 'resetGame',
+    value: function resetGame() {
+      this.player = new _player2.default({ position: [10, 10] });
+    }
+  }, {
+    key: 'listeners',
+    value: function listeners() {
+      var _this3 = this;
+
+      document.addEventListener('keydown', function (e) {
+        switch (e.keyCode) {
+          case 80:
+            _this3.pauseGame();
+            break;
+          case 82:
+            _this3.resetGame();
+            break;
+          default:
+            break;
+        }
+      });
     }
   }]);
 
