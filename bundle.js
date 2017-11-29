@@ -473,7 +473,6 @@ var Game = function () {
         if (_this.playerCollision(z, _this.player)) {
           _this.stoptoEat();
           _this.player.hp--;
-          console.log(_this.player.hp);
         }
       });
 
@@ -495,16 +494,17 @@ var Game = function () {
 
       if (this.pause) {
         this.ctx.font = '50px serif';
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText('Paused', 300, 200);
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText('Paused', 320, 200);
       } else {
         if (this.gameOver) {
           this.player = {};
           this.player.bullets = [];
+          this.player.killCount = 0;
+          // this.zombies = [];
         } else {
           this.player.update(this.ctx);
         }
-
         this.zombies.forEach(function (z, i) {
           if (z.startX < -50) {
             _this2.zombies.splice(i, 1);
@@ -515,6 +515,7 @@ var Game = function () {
           b.drawBullet(_this2.ctx);
           b.move();
         });
+        this.score();
         this.damages();
         this.g.spawnZombies();
         this.bg.draw();
@@ -522,12 +523,28 @@ var Game = function () {
       requestAnimationFrame(this.draw.bind(this));
     }
   }, {
+    key: 'score',
+    value: function score() {
+      this.ctx.font = '20px serif';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText('Score', 350, 50);
+      this.ctx.font = '20px serif';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText(this.player.killCount, 430, 50);
+      this.ctx.font = '20px serif';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText(this.player.hp, 630, 50);
+    }
+  }, {
     key: 'gameOverScreen',
     value: function gameOverScreen(ctx) {
       this.player = {};
       ctx.font = '50px serif';
-      ctx.fillStyle = 'white';
-      ctx.fillText("You've been eaten", 200, 200);
+      ctx.fillStyle = 'black';
+      ctx.fillText("You've been eaten", 230, 200);
+      ctx.font = '20px serif';
+      ctx.fillStyle = 'black';
+      ctx.fillText("Press 'r' to restart", 340, 300);
     }
   }, {
     key: 'stoptoEat',
@@ -542,6 +559,9 @@ var Game = function () {
     key: 'resetGame',
     value: function resetGame() {
       this.player = new _player2.default({ position: [10, 10] });
+      this.gameOver = false;
+      this.zombies = [];
+      this.start();
     }
   }, {
     key: 'listeners',
@@ -552,8 +572,6 @@ var Game = function () {
         switch (e.keyCode) {
           case 80:
             _this3.pause = !_this3.pause;
-            console.log(_this3.pause);
-            console.log("pausing");
             break;
           case 82:
             _this3.resetGame();
