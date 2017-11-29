@@ -527,13 +527,16 @@ var Game = function () {
     value: function score() {
       this.ctx.font = '20px serif';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText('Score', 350, 50);
+      this.ctx.fillText('Score', 50, 50);
       this.ctx.font = '20px serif';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText(this.player.killCount, 430, 50);
+      this.ctx.fillText(this.player.killCount, 130, 50);
       this.ctx.font = '20px serif';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText(this.player.hp, 630, 50);
+      this.ctx.fillText(this.player.hp, 720, 50);
+      this.ctx.font = '20px serif';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText('Health', 640, 50);
     }
   }, {
     key: 'gameOverScreen',
@@ -629,7 +632,7 @@ var Bullets = function () {
     key: 'drawBullet',
     value: function drawBullet(ctx) {
       ctx.fillStyle = 'red';
-      ctx.fillRect(this.startX + 20, this.startY + 30, this.dx, this.dy);
+      ctx.fillRect(this.startX + 40, this.startY + 30, this.dx, this.dy);
       this.move();
       this.destroyBullet();
     }
