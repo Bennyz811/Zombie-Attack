@@ -92,7 +92,7 @@ var Player = function () {
     this.controlls();
     this.gravity = 0.15;
     this.velocity = 0;
-    this.lift = -3;
+    this.lift = -3.5;
     this.startX = canvas.width / 2;
     this.startY = canvas.height - 10;
     this.dx = 6;
@@ -164,6 +164,8 @@ var Player = function () {
     value: function jump() {
       if (!this.jumping) {
         this.velocity += this.lift;
+      } else if (this.jumping) {
+        this.velocity += .1;
       }
       this.jumping = true;
     }
