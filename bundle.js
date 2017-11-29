@@ -424,11 +424,12 @@ var Game = function () {
     value: function start() {
       this.draw();
     }
-  }, {
-    key: 'pauseGame',
-    value: function pauseGame() {
-      this.pause = !this.pause;
-    }
+
+    // pauseGame(){
+    //   this.pause = !this.pause;
+    //   console.log(this.pause);
+    // }
+
   }, {
     key: 'createBg',
     value: function createBg(bgctx) {
@@ -496,28 +497,28 @@ var Game = function () {
         this.ctx.font = '50px serif';
         this.ctx.fillStyle = 'white';
         this.ctx.fillText('Paused', 300, 200);
-        return;
-      }
-      if (this.gameOver) {
-        this.player = {};
-        this.player.bullets = [];
       } else {
-        this.player.update(this.ctx);
-      }
-
-      this.zombies.forEach(function (z, i) {
-        if (z.startX < -50) {
-          _this2.zombies.splice(i, 1);
+        if (this.gameOver) {
+          this.player = {};
+          this.player.bullets = [];
+        } else {
+          this.player.update(this.ctx);
         }
-        z.update(_this2.ctx);
-      });
-      this.player.bullets.forEach(function (b) {
-        b.drawBullet(_this2.ctx);
-        b.move();
-      });
-      this.damages();
-      this.g.spawnZombies();
-      this.bg.draw();
+
+        this.zombies.forEach(function (z, i) {
+          if (z.startX < -50) {
+            _this2.zombies.splice(i, 1);
+          }
+          z.update(_this2.ctx);
+        });
+        this.player.bullets.forEach(function (b) {
+          b.drawBullet(_this2.ctx);
+          b.move();
+        });
+        this.damages();
+        this.g.spawnZombies();
+        this.bg.draw();
+      }
       requestAnimationFrame(this.draw.bind(this));
     }
   }, {
@@ -550,10 +551,13 @@ var Game = function () {
       document.addEventListener('keydown', function (e) {
         switch (e.keyCode) {
           case 80:
-            _this3.pauseGame();
+            _this3.pause = !_this3.pause;
+            console.log(_this3.pause);
+            console.log("pausing");
             break;
           case 82:
             _this3.resetGame();
+            console.log("resetting");
             break;
           default:
             break;
