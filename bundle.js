@@ -249,6 +249,7 @@ var Zombie = function () {
     this.zombieSprite.src = "app/assets/images/walk.png";
     this.hp = 10;
     this.internalClick = 0;
+    this.speed = [0.8, 3, 1.2, 2, 4, 5][Math.floor(Math.random() * 6)];
     this.stop = this.stop.bind(this);
   }
 
@@ -271,13 +272,12 @@ var Zombie = function () {
   }, {
     key: "move",
     value: function move() {
-      this.startX -= 0.8;
-      // [0.8, 3, 1, 5][Math.floor(Math.random() * 4)];
+      this.startX -= this.speed;
     }
   }, {
     key: "stop",
     value: function stop() {
-      this.startX += 0.8;
+      this.startX += this.speed;
     }
   }]);
 
@@ -442,7 +442,7 @@ var Game = function () {
   }, {
     key: 'bulletCollision',
     value: function bulletCollision(a, b) {
-      if (a.startX < b.startX + b.dx && a.startX + a.dx > b.startX) {
+      if (a.startX - 25 < b.startX + b.dx && a.startX + a.dx > b.startX && a.startY - 60 < b.startY + b.dy && a.dy + a.startY > b.startY) {
         return true;
       } else {
         return false;
@@ -664,7 +664,9 @@ var _zombie2 = _interopRequireDefault(_zombie);
 
 var _player = __webpack_require__(0);
 
-var _player2 = _interopRequireDefault(_player);
+var Player = _interopRequireWildcard(_player);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -687,7 +689,12 @@ var GraveYard = function () {
     key: 'spawnZombies',
     value: function spawnZombies() {
       var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
-      if (this.zombies.length === 0) {
+      // let count = this.killCount;
+      // let res = 1;
+      // if(count % 2 === 0){
+      //   res = count;
+      // }
+      while (this.zombies.length !== 1) {
         this.zombies.push(zom);
       }
     }
