@@ -278,7 +278,7 @@ var Zombie = function () {
         this.w = 0;
       }
       this.tick++;
-      if (this.tick > 45) {
+      if (this.tick > 35) {
         this.w++;
         this.tick = 0;
       }
