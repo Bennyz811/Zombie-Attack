@@ -546,6 +546,7 @@ var Game = function () {
         this.g.spawnZombies();
         this.bg.draw();
       }
+
       requestAnimationFrame(this.draw.bind(this));
     }
   }, {
@@ -571,14 +572,14 @@ var Game = function () {
       ctx.font = '50px serif';
       ctx.fillStyle = 'black';
       ctx.fillText("You've been eaten", 230, 200);
-      ctx.font = '20px serif';
-      ctx.fillStyle = 'black';
-      ctx.fillText("Press 'r' to restart", 340, 300);
+      ctx.font = '30px serif';
+      ctx.fillStyle = 'white';
+      ctx.fillText("Press 'r' to restart", 320, 300);
     }
   }, {
     key: 'startScreen',
     value: function startScreen() {
-      this.ctx.font = '20px serif';
+      this.ctx.font = '20px arial';
       this.ctx.fillStyle = 'black';
       this.ctx.fillText("Press 'enter' to start", 340, 300);
     }
@@ -589,7 +590,7 @@ var Game = function () {
       this.zombies.length = 0;
       this.player.bullets.length = 0;
       this.gameOver = false;
-      this.start();
+      // this.start();
     }
   }, {
     key: 'listeners',
@@ -606,7 +607,7 @@ var Game = function () {
             break;
           case 13:
             _this3.start();
-            console.log('hihihii');
+            break;
           default:
             break;
         }
