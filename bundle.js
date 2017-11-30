@@ -90,9 +90,9 @@ var Player = function () {
 
     this.position = option.position;
     this.controlls();
-    this.gravity = 0.15;
+    this.gravity = 0.35;
     this.velocity = 0;
-    this.lift = -3.5;
+    this.lift = -4.5;
     this.startX = canvas.width / 2;
     this.startY = canvas.height - 10;
     this.dx = 6;
@@ -207,10 +207,6 @@ var Player = function () {
       if (this.keys[32]) {
         this.move(ctx);
       }
-      // if(this.keys[80]){
-      //   this.pause = !this.pause
-      //   console.log('pause');
-      // }
       this.draw(ctx);
     }
   }]);
@@ -302,13 +298,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Background = function () {
-  function Background(ctx, img, posY, imgLength, velocity) {
+  function Background(ctx, img, posY, imgLength) {
     _classCallCheck(this, Background);
 
     this.ctx = ctx;
     this.img = img;
     this.x = 0;
-    this.velocity = velocity;
+    this.velocity = 0.7;
     this.posY = posY;
     this.imgLength = imgLength;
     // this.draw = this.draw.bind(this)
@@ -498,30 +494,28 @@ var Game = function () {
         this.ctx.font = '50px serif';
         this.ctx.fillStyle = 'black';
         this.ctx.fillText('Paused', 320, 200);
+      } else if (this.gameOver) {
+        // this.player = {};
+        // this.player.killCount = 0;
+        // this.player.bullets = [];
+        this.gameOverScreen(this.ctx);
+        // this.zombies = [];
       } else {
-        if (this.gameOver) {
-          this.player = {};
-          this.player.killCount = 0;
-          this.player.bullets = [];
-          this.gameOverScreen(this.ctx);
-          // this.zombies = [];
-        } else {
-          this.player.update(this.ctx);
-          this.zombies.forEach(function (z, i) {
-            if (z.startX < -50) {
-              _this2.zombies.splice(i, 1);
-            }
-            z.update(_this2.ctx);
-          });
-          this.player.bullets.forEach(function (b) {
-            b.drawBullet(_this2.ctx);
-            b.move();
-          });
-          this.score();
-          this.damages();
-          this.g.spawnZombies();
-          this.bg.draw();
-        }
+        this.player.update(this.ctx);
+        this.zombies.forEach(function (z, i) {
+          if (z.startX < -50) {
+            _this2.zombies.splice(i, 1);
+          }
+          z.update(_this2.ctx);
+        });
+        this.player.bullets.forEach(function (b) {
+          b.drawBullet(_this2.ctx);
+          b.move();
+        });
+        this.score();
+        this.damages();
+        this.g.spawnZombies();
+        this.bg.draw();
       }
       requestAnimationFrame(this.draw.bind(this));
     }
@@ -565,8 +559,9 @@ var Game = function () {
     key: 'resetGame',
     value: function resetGame() {
       this.player = new _player2.default({ position: [10, 10] });
+      this.zombies.length = 0;
+      this.player.bullets.length = 0;
       this.gameOver = false;
-      this.zombies = [];
       this.start();
     }
   }, {
@@ -695,7 +690,7 @@ var GraveYard = function () {
       // if(count % 2 === 0){
       //   res = count;
       // }
-      while (this.zombies.length !== 1) {
+      while (this.zombies.length !== 3) {
         this.zombies.push(zom);
       }
     }
