@@ -586,10 +586,10 @@ var Game = function () {
     value: function startScreen() {
       this.ctx.font = '30px arial';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Press 'enter' to start", 280, 150);
+      this.ctx.fillText("Press 'enter' to start", 275, 150);
       this.ctx.font = '30px arial';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Kill as many as you can", 265, 250);
+      this.ctx.fillText("Kill as many as you can", 260, 250);
     }
   }, {
     key: 'resetGame',
