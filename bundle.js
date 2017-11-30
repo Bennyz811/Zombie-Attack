@@ -587,9 +587,9 @@ var Game = function () {
       this.ctx.font = '30px arial';
       this.ctx.fillStyle = 'black';
       this.ctx.fillText("Press 'enter' to start", 280, 150);
-      this.ctx.font = '30px serif';
+      this.ctx.font = '30px arial';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Kill as many as you can", 275, 250);
+      this.ctx.fillText("Kill as many as you can", 265, 250);
     }
   }, {
     key: 'resetGame',
