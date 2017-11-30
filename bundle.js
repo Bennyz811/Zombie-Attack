@@ -106,8 +106,12 @@ var Player = function () {
     this.hp = 100;
     this.pause = false;
     this.killCount = 0;
+    this.w = 0;
+    this.h = 0;
+    this.tick = 0;
     this.heroSprite = new Image();
     this.heroSprite.src = "app/assets/images/heroguy/gun/03-Shot/07.png";
+    // this.heroSprite.src = "app/assets/images/hero_run.png";
   }
 
   _createClass(Player, [{
@@ -142,6 +146,19 @@ var Player = function () {
         this.bulletDelay--;
       }
     }
+    //
+    // running(){
+    //   ctx.drawImage(this.heroSprite, this.w * 485,this.h * 447, 485, 447, this.startX, this.startY, this.width, this.height);
+    //   if(this.w === 2){
+    //     this.w = 0;
+    //   }
+    //   this.tick++;
+    //   if(this.tick > 25){
+    //     this.w++;
+    //     this.tick = 0;
+    //   }
+    // }
+
   }, {
     key: "draw",
     value: function draw(ctx) {
@@ -247,12 +264,24 @@ var Zombie = function () {
     this.internalClick = 0;
     this.speed = [0.8, 3, 1.2, 2, 4, 5, 10][Math.floor(Math.random() * 7)];
     this.stop = this.stop.bind(this);
+    this.h = 0;
+    this.w = 0;
+    this.tick = 0;
   }
 
   _createClass(Zombie, [{
     key: "drawZombie",
     value: function drawZombie(ctx) {
-      ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY - 40, this.dx, this.dy);
+      // ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY-40, this.dx, this.dy);
+      ctx.drawImage(this.zombieSprite, this.w * 430, this.h * 519, 430, 519, this.startX, this.startY - 40, this.dx, this.dy);
+      if (this.w === 2) {
+        this.w = 0;
+      }
+      this.tick++;
+      if (this.tick > 45) {
+        this.w++;
+        this.tick = 0;
+      }
       this.move();
     }
   }, {
@@ -469,7 +498,7 @@ var Game = function () {
       });
       this.zombies.forEach(function (z) {
         if (_this.playerCollision(z, _this.player)) {
-          _this.stoptoEat();
+          z.stop();
           _this.player.hp--;
         }
       });
@@ -547,13 +576,11 @@ var Game = function () {
       ctx.fillText("Press 'r' to restart", 340, 300);
     }
   }, {
-    key: 'stoptoEat',
-    value: function stoptoEat() {
-      this.zombies.forEach(function (z) {
-        // if (z.startX === this.player.startX){
-        z.stop();
-        // }
-      }.bind(this));
+    key: 'startScreen',
+    value: function startScreen() {
+      this.ctx.font = '20px serif';
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Press 'enter' to start", 340, 300);
     }
   }, {
     key: 'resetGame',
@@ -576,8 +603,10 @@ var Game = function () {
             break;
           case 82:
             _this3.resetGame();
-            console.log("resetting");
             break;
+          case 13:
+            _this3.start();
+            console.log('hihihii');
           default:
             break;
         }
