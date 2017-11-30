@@ -438,6 +438,7 @@ var Game = function () {
     this.bgctx = bgctx;
     this.createBg(bgctx);
     this.gameOver = false;
+    this.startGame = true;
     this.g = new _graveyard2.default(ctx);
     this.zombies = this.g.zombies;
     this.damages();
@@ -519,32 +520,36 @@ var Game = function () {
     value: function draw() {
       var _this2 = this;
 
-      if (this.pause) {
-        this.ctx.font = '50px serif';
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText('Paused', 320, 200);
-      } else if (this.gameOver) {
-        // this.player = {};
-        // this.player.killCount = 0;
-        // this.player.bullets = [];
-        this.gameOverScreen(this.ctx);
-        // this.zombies = [];
+      if (this.startGame) {
+        this.startScreen();
       } else {
-        this.player.update(this.ctx);
-        this.zombies.forEach(function (z, i) {
-          if (z.startX < -50) {
-            _this2.zombies.splice(i, 1);
-          }
-          z.update(_this2.ctx);
-        });
-        this.player.bullets.forEach(function (b) {
-          b.drawBullet(_this2.ctx);
-          b.move();
-        });
-        this.score();
-        this.damages();
-        this.g.spawnZombies();
-        this.bg.draw();
+        if (this.pause) {
+          this.ctx.font = '50px serif';
+          this.ctx.fillStyle = 'black';
+          this.ctx.fillText('Paused', 320, 200);
+        } else if (this.gameOver) {
+          // this.player = {};
+          // this.player.killCount = 0;
+          // this.player.bullets = [];
+          this.gameOverScreen(this.ctx);
+          // this.zombies = [];
+        } else {
+          this.player.update(this.ctx);
+          this.zombies.forEach(function (z, i) {
+            if (z.startX < -50) {
+              _this2.zombies.splice(i, 1);
+            }
+            z.update(_this2.ctx);
+          });
+          this.player.bullets.forEach(function (b) {
+            b.drawBullet(_this2.ctx);
+            b.move();
+          });
+          this.score();
+          this.damages();
+          this.g.spawnZombies();
+          this.bg.draw();
+        }
       }
 
       requestAnimationFrame(this.draw.bind(this));
@@ -579,9 +584,9 @@ var Game = function () {
   }, {
     key: 'startScreen',
     value: function startScreen() {
-      this.ctx.font = '20px arial';
+      this.ctx.font = '30px arial';
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Press 'enter' to start", 340, 300);
+      this.ctx.fillText("Press 'enter' to start", 280, 200);
     }
   }, {
     key: 'resetGame',
@@ -606,7 +611,8 @@ var Game = function () {
             _this3.resetGame();
             break;
           case 13:
-            _this3.start();
+            // this.start();
+            _this3.startGame = false;
             break;
           default:
             break;
