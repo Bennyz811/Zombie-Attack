@@ -260,7 +260,7 @@ var Zombie = function () {
     this.dy = 65;
     this.zombieSprite = new Image();
     this.zombieSprite.src = "app/assets/images/walk.png";
-    this.hp = 10;
+    this.hp = 6;
     this.internalClick = 0;
     this.speed = [0.8, 3, 1.2, 2, 4, 5, 10][Math.floor(Math.random() * 7)];
     this.stop = this.stop.bind(this);
@@ -500,7 +500,7 @@ var Game = function () {
       this.zombies.forEach(function (z) {
         if (_this.playerCollision(z, _this.player)) {
           z.stop();
-          _this.player.hp--;
+          _this.player.hp -= 2;
         }
       });
 
