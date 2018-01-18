@@ -272,7 +272,6 @@ var Zombie = function () {
   _createClass(Zombie, [{
     key: "drawZombie",
     value: function drawZombie(ctx) {
-      // ctx.drawImage(this.zombieSprite, 80, 50, 300, 500, this.startX, this.startY-40, this.dx, this.dy);
       ctx.drawImage(this.zombieSprite, this.w * 430, this.h * 519, 430, 519, this.startX, this.startY - 40, this.dx, this.dy);
       if (this.w === 2) {
         this.w = 0;
