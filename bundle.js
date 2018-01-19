@@ -730,6 +730,7 @@ var GraveYard = function () {
       // }
       while (this.zombies.length !== 3) {
         this.zombies.push(zom);
+        debugger;
       }
     }
   }]);
