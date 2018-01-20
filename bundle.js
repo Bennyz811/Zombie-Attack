@@ -722,15 +722,9 @@ var GraveYard = function () {
   _createClass(GraveYard, [{
     key: 'spawnZombies',
     value: function spawnZombies() {
-      var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
-      // let count = this.killCount;
-      // let res = 1;
-      // if(count % 2 === 0){
-      //   res = count;
-      // }
       while (this.zombies.length !== 3) {
+        var zom = new _zombie2.default(this.startX, this.startY, this.ctx);
         this.zombies.push(zom);
-        debugger;
       }
     }
   }]);
