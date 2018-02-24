@@ -451,12 +451,6 @@ var Game = function () {
     value: function start() {
       this.draw();
     }
-
-    // pauseGame(){
-    //   this.pause = !this.pause;
-    //   console.log(this.pause);
-    // }
-
   }, {
     key: 'createBg',
     value: function createBg(bgctx) {
@@ -574,7 +568,7 @@ var Game = function () {
     value: function gameOverScreen(ctx) {
       this.player = {};
       ctx.font = '50px serif';
-      ctx.fillStyle = 'black';
+      ctx.fillStyle = 'red';
       ctx.fillText("You've been eaten", 230, 200);
       ctx.font = '30px serif';
       ctx.fillStyle = 'white';
@@ -584,10 +578,10 @@ var Game = function () {
     key: 'startScreen',
     value: function startScreen() {
       this.ctx.font = '30px arial';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'red';
       this.ctx.fillText("Press 'enter' to start", 275, 150);
       this.ctx.font = '30px arial';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'red';
       this.ctx.fillText("Kill as many as you can", 260, 250);
     }
   }, {
