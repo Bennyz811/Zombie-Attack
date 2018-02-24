@@ -20,7 +20,6 @@ body{
   font-size: 40px;
   text-align: center;
   letter-spacing: 5px;
-  line-height: 40px;
   font-family: 'PressStart2PRegular';
 }
 
@@ -29,10 +28,17 @@ body{
   justify-content: center;
 }
 
+.instructions {
+  margin-left: 305px;
+}
 .instructions ul {
   list-style: none;
 }
 
 .instructions li {
   color: #c43736;
+}
+
+.credits {
+  text-align: center;
 }
