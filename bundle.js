@@ -499,7 +499,6 @@ var Game = function () {
 
       if (this.player.hp < 0) {
         this.gameOver = true;
-        // this.gameOverScreen(this.ctx);
       }
       this.zombies.forEach(function (z, i) {
         if (z.hp <= 0) {
@@ -515,6 +514,7 @@ var Game = function () {
 
       if (this.startGame) {
         this.startScreen();
+        this.bg.draw();
       } else {
         if (this.pause) {
           this.ctx.font = '50px serif';
@@ -587,7 +587,6 @@ var Game = function () {
       this.zombies.length = 0;
       this.player.bullets.length = 0;
       this.gameOver = false;
-      // this.start();
     }
   }, {
     key: 'listeners',
@@ -603,7 +602,6 @@ var Game = function () {
             _this3.resetGame();
             break;
           case 13:
-            // this.start();
             _this3.startGame = false;
             break;
           default:
