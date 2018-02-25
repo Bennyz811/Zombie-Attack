@@ -521,11 +521,7 @@ var Game = function () {
           this.ctx.fillStyle = 'black';
           this.ctx.fillText('Paused', 320, 200);
         } else if (this.gameOver) {
-          // this.player = {};
-          // this.player.killCount = 0;
-          // this.player.bullets = [];
           this.gameOverScreen(this.ctx);
-          // this.zombies = [];
         } else {
           this.player.update(this.ctx);
           this.zombies.forEach(function (z, i) {
