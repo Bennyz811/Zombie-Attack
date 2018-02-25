@@ -1,5 +1,4 @@
 canvas {
-  margin: 100px auto;
   border-radius: 4px;
   display: block;
   overflow: hidden;
@@ -21,6 +20,7 @@ body{
   text-align: center;
   letter-spacing: 5px;
   font-family: 'PressStart2PRegular';
+  color: #FF6347;
 }
 
 .canvas-container {
@@ -29,16 +29,29 @@ body{
 }
 
 .instructions {
-  margin-left: 305px;
+  /* margin-left: 200px; */
+}
+
+.instructions h3 {
+  font-family: 'PressStart2PRegular';
+  color: #FF6347;
 }
 .instructions ul {
   list-style: none;
 }
 
 .instructions li {
-  color: #c43736;
+  font-weight: bold;
+  color: #000000;
+  text-shadow: 0 0 10px #ffffff;
 }
 
 .credits {
+  /* font-family: 'PressStart2PRegular'; */
+  color: #FF6347;
   text-align: center;
+}
+
+.second-container {
+  display: flex;
 }
