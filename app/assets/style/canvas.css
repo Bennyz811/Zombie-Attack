@@ -11,7 +11,7 @@ canvas-container {
 }
 
 body{
-  background-image: url("/Users/bennyzhao/Desktop/projects/zombie_attack/app/assets/images/cover-revised.jpg");
+  background-image: url("../images/cover-revised.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
