@@ -9,6 +9,11 @@ canvas-container {
   width: 100%
 }
 
+.canvas-container {
+  /* display: flex;
+  justify-content: center; */
+}
+
 body{
   background-image: url("../images/cover-revised.jpg");
   background-size: cover;
@@ -23,13 +28,9 @@ body{
   color: #FF6347;
 }
 
-.canvas-container {
-  display: flex;
-  justify-content: center;
-}
 
 .instructions {
-  /* margin-left: 200px; */
+  margin: 13px;
 }
 
 .instructions h3 {
@@ -38,6 +39,7 @@ body{
 }
 .instructions ul {
   list-style: none;
+  padding: 0px;
 }
 
 .instructions li {
@@ -50,13 +52,23 @@ body{
   font-family: 'PressStart2PRegular';
   color: #FF6347;
   text-align: center;
+  position: absolute;
+  right: 25px;
 }
 
-.second-container {
-  /* display: flex; */
+.instructions-container {
+  margin-right: 33px;
+}
+
+
+.center-container {
+  display: flex;
+  margin-top: 100px;
 }
 
 img {
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
+  border-radius: 3px;
+  background: burlywood;
 }
