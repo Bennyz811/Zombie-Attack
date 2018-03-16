@@ -47,11 +47,16 @@ body{
 }
 
 .credits {
-  /* font-family: 'PressStart2PRegular'; */
+  font-family: 'PressStart2PRegular';
   color: #FF6347;
   text-align: center;
 }
 
 .second-container {
-  display: flex;
+  /* display: flex; */
+}
+
+img {
+  height: 30px;
+  width: 30px;
 }
