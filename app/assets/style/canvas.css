@@ -54,6 +54,7 @@ body{
   text-align: center;
   position: absolute;
   right: 25px;
+  text-decoration: none;
 }
 
 .instructions-container {
