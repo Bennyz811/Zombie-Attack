@@ -518,7 +518,7 @@ var Game = function () {
       } else {
         if (this.pause) {
           this.ctx.font = '50px serif';
-          this.ctx.fillStyle = 'black';
+          this.ctx.fillStyle = "FF6347";
           this.ctx.fillText('Paused', 320, 200);
         } else if (this.gameOver) {
           this.gameOverScreen(this.ctx);
@@ -547,16 +547,16 @@ var Game = function () {
     key: 'score',
     value: function score() {
       this.ctx.font = '20px serif';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'FF6347';
       this.ctx.fillText('Score', 50, 50);
       this.ctx.font = '20px serif';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'FF6347';
       this.ctx.fillText(this.player.killCount, 130, 50);
       this.ctx.font = '20px serif';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'FF6347';
       this.ctx.fillText(this.player.hp, 720, 50);
       this.ctx.font = '20px serif';
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = 'FF6347';
       this.ctx.fillText('Health', 640, 50);
     }
   }, {
@@ -564,21 +564,33 @@ var Game = function () {
     value: function gameOverScreen(ctx) {
       this.player = {};
       ctx.font = '50px serif';
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = "FF6347";
       ctx.fillText("You've been eaten", 230, 200);
       ctx.font = '30px serif';
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = "FF6347";
       ctx.fillText("Press 'r' to restart", 320, 300);
     }
   }, {
     key: 'startScreen',
     value: function startScreen() {
-      this.ctx.font = '30px arial';
-      this.ctx.fillStyle = "#c43736";
-      this.ctx.fillText("Press 'enter' to start", 275, 150);
-      this.ctx.font = '30px arial';
-      this.ctx.fillStyle = '#c43736';
-      this.ctx.fillText("Kill as many as you can", 260, 250);
+      this.ctx.font = "20px san-serif";
+      this.ctx.fillStyle = "#FF6347";
+      this.ctx.fillText("Press 'enter' to start", 250, 100);
+      this.ctx.font = "20px san-serif";
+      this.ctx.fillStyle = "#FF6347";
+      this.ctx.fillText("Use arrow keys to move", 300, 155);
+      this.ctx.font = "20px san-serif";
+      this.ctx.fillStyle = "#FF6347";
+      this.ctx.fillText("HOLD space bar to shoot", 300, 180);
+      this.ctx.font = "20px san-serif";
+      this.ctx.fillStyle = "#FF6347";
+      this.ctx.fillText("Press 'p' to PAUSE", 300, 205);
+      this.ctx.font = "20px san-serif";
+      this.ctx.fillStyle = "#FF6347";
+      this.ctx.fillText("Press 'r' to RESTART", 300, 230);
+      this.ctx.font = '30px san-serif';
+      this.ctx.fillStyle = '#FF6347';
+      this.ctx.fillText("Kill as many as you can", 250, 300);
     }
   }, {
     key: 'resetGame',
