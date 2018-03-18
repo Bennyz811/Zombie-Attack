@@ -573,7 +573,7 @@ var Game = function () {
   }, {
     key: 'startScreen',
     value: function startScreen() {
-      this.ctx.font = "20px san-serif";
+      this.ctx.font = "30px san-serif";
       this.ctx.fillStyle = "#FF6347";
       this.ctx.fillText("Press 'enter' to start", 250, 100);
       this.ctx.font = "20px san-serif";
