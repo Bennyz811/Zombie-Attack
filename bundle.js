@@ -93,7 +93,7 @@ var Player = function () {
     this.gravity = 0.35;
     this.velocity = 0;
     this.lift = -4.5;
-    this.startX = canvas.width / 2;
+    this.startX = 80;
     this.startY = canvas.height - 10;
     this.dx = 6;
     this.dy = 6;
@@ -540,7 +540,7 @@ var Game = function () {
           this.bg.draw();
         }
       }
-
+      console.log(this.player.startX, this.player.startY, this.player.position);
       requestAnimationFrame(this.draw.bind(this));
     }
   }, {
@@ -578,7 +578,7 @@ var Game = function () {
       this.ctx.fillText("Press 'enter' to start", 250, 100);
       this.ctx.font = "20px san-serif";
       this.ctx.fillStyle = "#FF6347";
-      this.ctx.fillText("Use arrow keys to move", 300, 155);
+      this.ctx.fillText("Use arrow keys to move and JUMP", 300, 155);
       this.ctx.font = "20px san-serif";
       this.ctx.fillStyle = "#FF6347";
       this.ctx.fillText("HOLD space bar to shoot", 300, 180);
